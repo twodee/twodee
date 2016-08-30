@@ -1,5 +1,5 @@
-add_library(twodee
-  STATIC
+set (
+  TWODEE_SOURCES
   Camera.cpp
   FieldTraits.cpp
   Log.cpp
@@ -8,4 +8,24 @@ add_library(twodee
   Scanner.cpp
   Trimesh.cpp
   Utilities.cpp
+)
+
+if (OPENGL_FOUND)
+  list (
+    APPEND
+    TWODEE_SOURCES
+    ShaderProgram.cpp
+    Texture.cpp
+    Trackball.cpp
+    UniformManager.cpp
+    UtilitiesOpenGL.cpp
+    VertexArray.cpp
+    VertexAttributes.cpp
+  )
+endif()
+
+add_library (
+  twodee
+  STATIC
+  ${TWODEE_SOURCES}
 )
