@@ -2,12 +2,13 @@
 #define UTILITIESOPENGL_H
 
 #define GL_GLEXT_PROTOTYPES
-#define GL3_PROTOTYPES
-/* #include <QWidget> */
-/* #include <QOpenGLWidget> */
-/* #include <QOpenGLFunctions> */
+/* #define GL3_PROTOTYPES */
 
+#ifdef __APPLE__
 #include <OpenGL/gl3.h>
+#else
+#include <GL/gl.h>
+#endif
 
 #include <string>
 #include <vector>
