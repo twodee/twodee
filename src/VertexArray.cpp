@@ -37,6 +37,7 @@ VertexArray::VertexArray(const ShaderProgram& program,
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attributes.GetIndexBufferID());
   glBindVertexArray(0);
 #else
+  OpenGL::CheckError("before non-vao");
   locations = new GLint[attributes.GetAttributeCount()];
   for (int i = 0; i < attributes.GetAttributeCount(); ++i) {
     const VertexAttribute *attribute = attributes.GetAttribute(i);
@@ -48,8 +49,10 @@ VertexArray::VertexArray(const ShaderProgram& program,
       glVertexAttribPointer(locations[i], attribute->ncomponents, GL_FLOAT, GL_FALSE, 0, 0);
       glEnableVertexAttribArray(locations[i]);
     }
+    OpenGL::CheckError("after attribute");
   }
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attributes.GetIndexBufferID());
+  OpenGL::CheckError("after non-vao");
 #endif
 }
 

@@ -18,6 +18,7 @@ if (WANTS_OPENGL)
 endif()
 
 # This header holds some macros that are set by CMake options.
+option(USE_VAO "Use vertex arrays" ON)
 configure_file(${PROJECT_SOURCE_DIR}/include/twodee/Configuration.h.in ${CMAKE_BINARY_DIR}/include/twodee/Configuration.h)
 
 # Raw headers live in the project source directory, but derived ones live in
