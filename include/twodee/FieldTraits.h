@@ -6,7 +6,7 @@
 #include "twodee/Configuration.h"
 #include "FieldType.h"
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
 #include <Magick++.h>
 #endif
 
@@ -27,7 +27,7 @@ class FieldTraits {
     /** The maximum value for this data type */
     static const T max;
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
     static const Magick::StorageType magick_type;
 #endif
 };

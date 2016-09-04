@@ -5,7 +5,7 @@
 
 #include "twodee/Configuration.h"
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
 #include <Magick++.h>
 #endif
 
@@ -63,7 +63,7 @@ template<class T, int ndims> class NField : public NFieldBase<ndims> {
      */
     ~NField();
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
     /**
      Loads image stored in the specified file into this field.
      @param path File containing field
@@ -354,7 +354,7 @@ NField<T, ndims>::NField(const std::string& path)
     ReadF4(path);
   }
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
   else if (ext.compare(".png") == 0 ||
            ext.compare(".bmp") == 0 ||
            ext.compare(".ppm") == 0 ||
@@ -411,7 +411,7 @@ void NField<T, ndims>::Wipe() {
 
 /* ------------------------------------------------------------------------- */
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
 template<class T, int ndims>
 void NField<T, ndims>::ReadImage(const std::string& path) {
   assert(ndims >= 2);
@@ -640,7 +640,7 @@ void NField<T, ndims>::Write(const std::string& path) const {
     WriteF20(path);
   }
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
   else if (ext.compare(".jpg") == 0 ||
            ext.compare(".png") == 0 ||
            ext.compare(".pgm") == 0 ||
@@ -692,7 +692,7 @@ void NField<T, ndims>::WriteF20(const std::string& path) const {
 
 /* ------------------------------------------------------------------------- */
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
 template<class T, int ndims>
 void NField<T, ndims>::WriteImage(const std::string& path,
                                   int channel_id,

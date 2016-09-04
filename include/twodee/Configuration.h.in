@@ -1,7 +1,7 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#cmakedefine USE_MAGICK
+#cmakedefine USE_IMAGEMAGICK
 #cmakedefine USE_VAO
 
 #endif

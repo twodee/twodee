@@ -19,6 +19,14 @@ endif()
 
 # This header holds some macros that are set by CMake options.
 option(USE_VAO "Use vertex arrays" ON)
+option(USE_IMAGEMAGICK "Use ImageMagick" ON)
+if (USE_IMAGEMAGICK)
+  find_package(ImageMagick COMPONENTS Magick++ REQUIRED)
+  add_definitions(-DMAGICKCORE_HDRI_ENABLE=0)
+  add_definitions(-DMAGICKCORE_QUANTUM_DEPTH=16)
+  message("asdfasdfasdfdsfads")
+  include_directories(${ImageMagick_INCLUDE_DIRS})
+endif()
 configure_file(${PROJECT_SOURCE_DIR}/include/twodee/Configuration.h.in ${CMAKE_BINARY_DIR}/include/twodee/Configuration.h)
 
 # Raw headers live in the project source directory, but derived ones live in

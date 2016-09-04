@@ -37,7 +37,7 @@ template<> const int FieldTraits<char>::type = FieldType::CHAR;
 
 /* ------------------------------------------------------------------------- */
 
-#ifdef USE_MAGICK
+#ifdef USE_IMAGEMAGICK
 template<> const Magick::StorageType FieldTraits<unsigned char>::magick_type = Magick::CharPixel;
 template<> const Magick::StorageType FieldTraits<unsigned short>::magick_type = Magick::ShortPixel;
 template<> const Magick::StorageType FieldTraits<unsigned int>::magick_type = Magick::IntegerPixel;
