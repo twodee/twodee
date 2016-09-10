@@ -7,6 +7,10 @@ if (NOT DEFINED ${CMAKE_CXX_FLAGS})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+set(TWODEE_LIBRARIES twodee CACHE INTERNAL "FOO")
+set(TWODEE_INCLUDE_DIRECTORIES CACHE INTERNAL "FOO")
+set(TWODEE_DEFINITIONS CACHE INTERNAL "FOO")
+
 if (WANTS_OPENGL)
   # On my Macintosh, CGAL wants to interpose its FindOpenGL, which fails
   # because it doesn't include its own macros file. Let's route around
@@ -22,10 +26,14 @@ option(USE_VAO "Use vertex arrays" ON)
 option(USE_IMAGEMAGICK "Use ImageMagick" ON)
 if (USE_IMAGEMAGICK)
   find_package(ImageMagick COMPONENTS Magick++ REQUIRED)
-  add_definitions(-DMAGICKCORE_HDRI_ENABLE=0)
-  add_definitions(-DMAGICKCORE_QUANTUM_DEPTH=16)
-  message("asdfasdfasdfdsfads")
+
+  set(IMAGEMAGICK_DEFINITIONS -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16)
+  add_definitions(${IMAGEMAGICK_DEFINITIONS})
   include_directories(${ImageMagick_INCLUDE_DIRS})
+
+  set(TWODEE_INCLUDE_DIRECTORIES ${TWODEE_INCLUDE_DIRECTORIES} ${ImageMagick_INCLUDE_DIRS} CACHE INTERNAL "FOO")
+  set(TWODEE_DEFINITIONS ${TWODEE_DEFINITIONS} ${IMAGEMAGICK_DEFINITIONS} CACHE INTERNAL "FOO")
+  set(TWODEE_LIBRARIES ${TWODEE_LIBRARIES} ${ImageMagick_LIBRARIES} CACHE INTERNAL "FOO")
 endif()
 configure_file(${PROJECT_SOURCE_DIR}/include/twodee/Configuration.h.in ${CMAKE_BINARY_DIR}/include/twodee/Configuration.h)
 
