@@ -63,6 +63,8 @@ class Texture {
     };
 
     Texture(int texture_unit = -1);
+    ~Texture();
+
     template<typename T> Texture &Upload(int width, const T *texels);
     template<typename T> Texture &Upload(int width, int height, const T *texels);
     template<typename T> Texture &Upload(int width, int height, const T *left, const T *right, const T *down, const T *up, const T *back, const T *front);

@@ -14,6 +14,7 @@ if (OPENGL_FOUND)
   list (
     APPEND
     TWODEE_SOURCES
+    FramebufferObject.cpp
     ShaderProgram.cpp
     Texture.cpp
     Trackball.cpp

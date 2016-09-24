@@ -34,6 +34,12 @@ Texture::Texture(int texture_unit)
 
 /* ------------------------------------------------------------------------- */
 
+Texture::~Texture() {
+  glDeleteTextures(1, &texture_id);
+}
+
+/* ------------------------------------------------------------------------- */
+
 void Texture::Bind() {
   glActiveTexture(GL_TEXTURE0 + texture_unit);
   glBindTexture(gl_target, texture_id);
