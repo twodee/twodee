@@ -2,33 +2,15 @@
 #define UTILITIESOPENGL_H
 
 #define GL_GLEXT_PROTOTYPES
-/* #define GL3_PROTOTYPES */
 
 #ifdef __APPLE__
-#include <OpenGL/gl3.h>
+#include "OpenGL/gl3.h"
 #else
 #include <GL/gl.h>
 #endif
 
 #include <string>
 #include <vector>
-
-/* #define GL_GLEXT_PROTOTYPES */
-/* #ifdef ANDROID */
-/* #include <GLES2/gl2.h> */
-/* #include <GLES2/gl2ext.h> */
-/* #else */
-/* #include <GL/glew.h> */
-/* #ifdef __APPLE__ */
-/* #define GL3_PROTOTYPES */
-/* #include <OpenGL/gl3.h> */
-/* #undef glGenVertexArrays */
-/* #define glGenVertexArrays glGenVertexArraysAPPLE */
-/* #undef glBindVertexArray */
-/* #define glBindVertexArray glBindVertexArrayAPPLE */
-/* #define */
-/* #endif */
-/* #endif */
 
 namespace td {
 
