@@ -468,7 +468,7 @@ void NField<T, ndims>::ReadImage(const std::string& path) {
 
     // Now we 
     Utilities::ConvertArray(data, uc_data, this->GetValueCount());
-    Normalize();
+    /* Normalize(); */
 
     delete[] uc_data;
   } catch (Magick::Exception& error) {
@@ -508,7 +508,7 @@ void NField<T, ndims>::ReadF20(const std::string& path) {
   NFieldIterator<ndims> c(this->GetDimensions());
   while (c.HasNext()) {
     c.Next();
-    float *element = (*this)(c);
+    T *element = (*this)(c);
     for (int i = 0; i < this->nchannels; ++i) {
       element[i] = (T) in.NextFloat();
     }
@@ -554,7 +554,7 @@ void NField<T, ndims>::ReadF21(const std::string& path) {
   NFieldIterator<ndims> c(this->GetDimensions());
   while (c.HasNext()) {
     c.Next();
-    float *element = (*this)(c);
+    T *element = (*this)(c);
     for (int i = 0; i < this->nchannels; ++i) {
       element[i] = (T) in.NextFloat();
     }

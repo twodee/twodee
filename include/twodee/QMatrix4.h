@@ -47,6 +47,7 @@ template<class T> class QMatrix4 : public QSquareMatrix<T, 4> {
     QMatrix4(const QMatrix<T, 4, 4>& src);
 
     QMatrix4<T> GetOrthonormalInverse() const;
+    QMatrix4<T> GetInverse() const;
 
     /**
      Gets a matrix that translates by the specified offsets.
@@ -323,6 +324,52 @@ QMatrix4<T> QMatrix4<T>::GetOrthonormalInverse() const {
   inv(3, 3) = 1;
 
   return inv;
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<class T>
+QMatrix4<T> QMatrix4<T>::GetInverse() const {
+  QMatrix4<T> inverse;
+
+  T a0 = (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
+  T a1 = (*this)(0, 0) * (*this)(1, 2) - (*this)(0, 2) * (*this)(1, 0);
+  T a2 = (*this)(0, 0) * (*this)(1, 3) - (*this)(0, 3) * (*this)(1, 0);
+  T a3 = (*this)(0, 1) * (*this)(1, 2) - (*this)(0, 2) * (*this)(1, 1);
+  T a4 = (*this)(0, 1) * (*this)(1, 3) - (*this)(0, 3) * (*this)(1, 1);
+  T a5 = (*this)(0, 2) * (*this)(1, 3) - (*this)(0, 3) * (*this)(1, 2);
+  T b0 = (*this)(2, 0) * (*this)(3, 1) - (*this)(2, 1) * (*this)(3, 0);
+  T b1 = (*this)(2, 0) * (*this)(3, 2) - (*this)(2, 2) * (*this)(3, 0);
+  T b2 = (*this)(2, 0) * (*this)(3, 3) - (*this)(2, 3) * (*this)(3, 0);
+  T b3 = (*this)(2, 1) * (*this)(3, 2) - (*this)(2, 2) * (*this)(3, 1);
+  T b4 = (*this)(2, 1) * (*this)(3, 3) - (*this)(2, 3) * (*this)(3, 1);
+  T b5 = (*this)(2, 2) * (*this)(3, 3) - (*this)(2, 3) * (*this)(3, 2);
+
+  T determinant = a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
+
+  if (determinant != 0) {
+    T inverse_determinant = 1 / determinant;
+    inverse(0, 0) = (+(*this)(1, 1) * b5 - (*this)(1, 2) * b4 + (*this)(1, 3) * b3) * inverse_determinant;
+    inverse(0, 1) = (-(*this)(0, 1) * b5 + (*this)(0, 2) * b4 - (*this)(0, 3) * b3) * inverse_determinant;
+    inverse(0, 2) = (+(*this)(3, 1) * a5 - (*this)(3, 2) * a4 + (*this)(3, 3) * a3) * inverse_determinant;
+    inverse(0, 3) = (-(*this)(2, 1) * a5 + (*this)(2, 2) * a4 - (*this)(2, 3) * a3) * inverse_determinant;
+    inverse(1, 0) = (-(*this)(1, 0) * b5 + (*this)(1, 2) * b2 - (*this)(1, 3) * b1) * inverse_determinant;
+    inverse(1, 1) = (+(*this)(0, 0) * b5 - (*this)(0, 2) * b2 + (*this)(0, 3) * b1) * inverse_determinant;
+    inverse(1, 2) = (-(*this)(3, 0) * a5 + (*this)(3, 2) * a2 - (*this)(3, 3) * a1) * inverse_determinant;
+    inverse(1, 3) = (+(*this)(2, 0) * a5 - (*this)(2, 2) * a2 + (*this)(2, 3) * a1) * inverse_determinant;
+    inverse(2, 0) = (+(*this)(1, 0) * b4 - (*this)(1, 1) * b2 + (*this)(1, 3) * b0) * inverse_determinant;
+    inverse(2, 1) = (-(*this)(0, 0) * b4 + (*this)(0, 1) * b2 - (*this)(0, 3) * b0) * inverse_determinant;
+    inverse(2, 2) = (+(*this)(3, 0) * a4 - (*this)(3, 1) * a2 + (*this)(3, 3) * a0) * inverse_determinant;
+    inverse(2, 3) = (-(*this)(2, 0) * a4 + (*this)(2, 1) * a2 - (*this)(2, 3) * a0) * inverse_determinant;
+    inverse(3, 0) = (-(*this)(1, 0) * b3 + (*this)(1, 1) * b1 - (*this)(1, 2) * b0) * inverse_determinant;
+    inverse(3, 1) = (+(*this)(0, 0) * b3 - (*this)(0, 1) * b1 + (*this)(0, 2) * b0) * inverse_determinant;
+    inverse(3, 2) = (-(*this)(3, 0) * a3 + (*this)(3, 1) * a1 - (*this)(3, 2) * a0) * inverse_determinant;
+    inverse(3, 3) = (+(*this)(2, 0) * a3 - (*this)(2, 1) * a1 + (*this)(2, 2) * a0) * inverse_determinant;
+  } else {
+    std::cout << "oh no!!!!!!!!!!!!!" << std::endl;
+  }
+
+  return inverse;
 }
 
 /* ------------------------------------------------------------------------- */
