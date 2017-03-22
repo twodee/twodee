@@ -41,7 +41,7 @@ template<class T> class Polyline : public NField<T, 1> {
 
     Trimesh *Revolve(const QVector3<T>& axis, int nstops, float degrees = 360.0f) const;
     Trimesh *Dowel(int nstops, T radius, bool is_capped = true, T twist = (T) 0, float max_bend = 361.0f) const;
-    void Fracture(T max_segment_length);
+    void Fracture(T max_segment_length, int nspatial_dims = -1);
     bool IsOpen() const;
     QVector3<T> GetNormal() const;
 
@@ -682,9 +682,14 @@ Trimesh *Polyline<T>::Dowel(int nstops, T radius, bool is_capped, T twist, float
 /* ------------------------------------------------------------------------- */
 
 template<class T>
-void Polyline<T>::Fracture(T max_segment_length) {
+void Polyline<T>::Fracture(T max_segment_length,
+                           int nspatial_dims) {
   int nvertices = this->GetElementCount();
   int ndims = this->GetChannelCount();
+
+  if (nspatial_dims < 0) {
+    nspatial_dims = ndims;
+  }
 
   // Get the vertex positions in a more usable vector form.
   Vector<T> *old_vertices = new Vector<T>[nvertices]; 
@@ -698,6 +703,7 @@ void Polyline<T>::Fracture(T max_segment_length) {
   int up_to = is_open ? nvertices - 1 : nvertices;
   for (int vi = 0; vi < up_to; ++vi) {
     // Find the vector from this element to the next -- and its length.
+    diffs[vi] = Vector<T>(nspatial_dims, &old_vertices[(vi + 1) % nvertices][0]) - Vector<T>(nspatial_dims, &old_vertices[vi][0]);
     diffs[vi] = old_vertices[(vi + 1) % nvertices] - old_vertices[vi];
     T segment_length = diffs[vi].GetLength();
 
@@ -719,7 +725,7 @@ void Polyline<T>::Fracture(T max_segment_length) {
       ++new_ei;
  
       // If the vector is longer than allowed, let's break this segment up.
-      T segment_length = diffs[vi].GetLength();
+      T segment_length = Vector<T>(nspatial_dims, &diffs[vi][0]).GetLength();
       if (segment_length > max_segment_length) {
         int nsegments = (int) ceil(segment_length / max_segment_length);
         T fracture_length = segment_length / nsegments;
