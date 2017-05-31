@@ -73,6 +73,8 @@ template<class T> class QMatrix4 : public QSquareMatrix<T, 4> {
      */
     static QMatrix4<T> GetRotate(T degrees, const QVector3<T>& axis);
 
+    static QMatrix4<T> GetRotate(const QVector3<T> &from, const QVector3<T> &to);
+
     static QMatrix4<T> GetPlanarProjection(const QVector3<T> &from, const QVector3<T> &plane_normal, const QVector3<T> &plane_point);
 
     /**
@@ -190,6 +192,24 @@ QMatrix4<T> QMatrix4<T>::GetTranslate(T x, T y, T z) {
 template<class T>
 QMatrix4<T> QMatrix4<T>::GetScale(T x, T y, T z) {
   return QSquareMatrix<T, 4>::GetScale(QVector3<T>(x, y, z));
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<class T>
+QMatrix4<T> QMatrix4<T>::GetRotate(const QVector3<T> &from, const QVector3<T> &to) {
+  // If from and to are already aligned, then they'll give a bad crossproduct.
+  // We'll just give back the identity in such a case. TODO: Handle antiparallel
+  // vectors.
+  T dot = from.Dot(to);
+  if (fabs(dot - 1) < 1.0e-6) {
+    return QMatrix4<T>(1);
+  } else {
+    QVector3<T> cross = from.Cross(to);
+    cross.Normalize();
+    T degrees = -acos(dot) * 180 / PI;
+    return GetRotate(degrees, cross);
+  }
 }
 
 /* ------------------------------------------------------------------------- */

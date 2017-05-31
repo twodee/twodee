@@ -18,6 +18,7 @@ template<typename T, int ndims> class Plane {
 
     bool Intersect(const Line<T, ndims>& line, QVector<T, ndims>& intersection_point) const;
     T DistanceTo(const QVector<T, ndims>& point) const;
+    QVector<T, ndims> Project(const QVector<T, ndims>& point) const;
 
   protected:
     QVector<T, ndims> point;
@@ -73,6 +74,14 @@ bool Plane<T, ndims>::Intersect(const Line<T, ndims>& line, QVector<T, ndims>& i
 template<typename T, int ndims>
 T Plane<T, ndims>::DistanceTo(const QVector<T, ndims>& point) const {
   return normal.Dot(point - this->point);
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<typename T, int ndims>
+QVector<T, ndims> Plane<T, ndims>::Project(const QVector<T, ndims>& point) const {
+  T distance = this->DistanceTo(point);
+  return point - distance * normal;
 }
 
 /* ------------------------------------------------------------------------- */
