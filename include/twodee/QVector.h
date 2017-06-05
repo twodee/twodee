@@ -182,6 +182,10 @@ template<class T, int ndims> class QVector {
 
     T GetDistanceTo(const QVector<T, ndims> &other) const;
 
+    QVector<T, ndims> Reflect(const QVector<T, ndims> &axis);
+    QVector<T, ndims> Reflect(const QVector<T, ndims> &axis,
+                              const QVector<T, ndims> &point);
+
     /**
      Casts the vector to a vector of another type.
      */
@@ -790,6 +794,24 @@ bool QVector<T, ndims>::IsParallel(const QVector<T, ndims>& that, T epsilon) con
   // [false true] < epsilon
 
   return 1 - fabs(dot) < epsilon;
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<class T, int ndims>
+QVector<T, ndims> QVector<T, ndims>::Reflect(const QVector<T, ndims> &axis) {
+  QVector<T, ndims> inverse = -*this;
+  T dot = inverse.Dot(axis);  
+  return inverse - 2 * dot * axis;
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<class T, int ndims>
+QVector<T, ndims> QVector<T, ndims>::Reflect(const QVector<T, ndims> &axis,
+                                             const QVector<T, ndims> &point) {
+  QVector<T, ndims> diff = *this - point;
+  return diff.Reflect(axis) + point;
 }
 
 /* ------------------------------------------------------------------------- */
