@@ -426,9 +426,17 @@ void NField<T, ndims>::ReadImage(const std::string& path) {
       magick_nchannels = 1;
     }
 
-    else if (image.type() == Magick::GrayscaleAlphaType) {
+#if MagickLibVersion >= 0x700
+#define GRAYSCALE_ALPHA Magick::GrayscaleAlphaType
+#else
+#define GRAYSCALE_ALPHA Magick::GrayscaleMatteType
+#endif
+
+    else if (image.type() == GRAYSCALE_ALPHA) {
       magick_nchannels = 2;
     }
+
+#undef GRAYSCALE_ALPHA
 
     else if (image.type() == Magick::PaletteType ||
              image.type() == Magick::TrueColorType) {
