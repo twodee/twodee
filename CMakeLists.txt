@@ -19,6 +19,7 @@ if (WANTS_OPENGL)
   set(CMAKE_MODULE_PATH "")
   find_package(OpenGL REQUIRED)
   set(CMAKE_MODULE_PATH ${ORIGINAL_MODULE_PATH})
+  include_directories(${OPENGL_INCLUDE_DIR})
 endif()
 
 # This header holds some macros that are set by CMake options.
@@ -29,6 +30,7 @@ if (USE_IMAGEMAGICK)
 
   set(IMAGEMAGICK_DEFINITIONS -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16)
   add_definitions(${IMAGEMAGICK_DEFINITIONS})
+  list(APPEND ImageMagick_INCLUDE_DIRS /usr/include/x86_64-linux-gnu/ImageMagick-6 /usr/include/ImageMagick-6)
   include_directories(${ImageMagick_INCLUDE_DIRS})
 
   set(TWODEE_INCLUDE_DIRECTORIES ${TWODEE_INCLUDE_DIRECTORIES} ${ImageMagick_INCLUDE_DIRS} CACHE INTERNAL "FOO")
@@ -39,7 +41,7 @@ configure_file(${PROJECT_SOURCE_DIR}/include/twodee/Configuration.h.in ${CMAKE_B
 
 # Raw headers live in the project source directory, but derived ones live in
 # the build's include directory.
-include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/include ${OPENGL_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/include)
 
 add_subdirectory(src)
 add_subdirectory(test)

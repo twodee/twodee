@@ -1151,7 +1151,11 @@ void Trimesh::WriteJSON(const std::string& path) {
   f << "    \"generatedBy\": \"libtwodee\", " << std::endl;
   f << "    \"vertices\": " << GetVertexCount() << "," << std::endl;
   f << "    \"faces\": " << GetFaceCount() << "," << std::endl;
-  f << "    \"normals\": " << GetVertexCount() << "," << std::endl;
+
+  if (normals != NULL) {
+    f << "    \"normals\": " << GetVertexCount() << "," << std::endl;
+  }
+
   f << "    \"colors\": " << (has_vertex_colors ? GetVertexCount() : 0) << "," << std::endl;
   f << "    \"uvs\": " << 0 << "," << std::endl;
   f << "    \"materials\": " << 0 << "," << std::endl;
@@ -1172,16 +1176,18 @@ void Trimesh::WriteJSON(const std::string& path) {
   f << "]," << std::endl;
  
   // write normals
-  f << "  \"normals\": [";
-  if (GetVertexCount() > 0) {
-    float *normal = normals;
-    f << normal[0] << "," << normal[1] << "," << normal[2];
-    normal += 3;
-    for (int i = 1; i < nvertices; ++i, normal += 3) {
-      f << "," << normal[0] << "," << normal[1] << "," << normal[2];
+  if (normals != NULL) {
+    f << "  \"normals\": [";
+    if (GetVertexCount() > 0) {
+      float *normal = normals;
+      f << normal[0] << "," << normal[1] << "," << normal[2];
+      normal += 3;
+      for (int i = 1; i < nvertices; ++i, normal += 3) {
+        f << "," << normal[0] << "," << normal[1] << "," << normal[2];
+      }
     }
+    f << "]," << std::endl;
   }
-  f << "]," << std::endl;
  
   // write colors
   if (has_vertex_colors) {
@@ -1208,7 +1214,12 @@ void Trimesh::WriteJSON(const std::string& path) {
     f << "]," << std::endl;
   }
 
-  int face_type = has_vertex_colors ? 128 + 32 : 0 + 32;
+  int face_type;
+  if (normals != NULL) {
+    face_type = has_vertex_colors ? 128 + 32 : 0 + 32;
+  } else {
+    face_type = 0; // TODO handle colors
+  }
 
   // write face indices
   f << "  \"faces\": [";
@@ -1219,7 +1230,9 @@ void Trimesh::WriteJSON(const std::string& path) {
     if (has_vertex_colors) {
       f << "," << face[0] << "," << face[1] << "," << face[2];
     }
-    f << "," << face[0] << "," << face[1] << "," << face[2]; // normals
+    if (normals != NULL) {
+      f << "," << face[0] << "," << face[1] << "," << face[2]; // normals
+    }
     face += 3;
 
     for (int i = 1; i < GetFaceCount(); ++i) {
@@ -1227,7 +1240,9 @@ void Trimesh::WriteJSON(const std::string& path) {
       if (has_vertex_colors) {
         f << "," << face[0] << "," << face[1] << "," << face[2];
       }
-      f << "," << face[0] << "," << face[1] << "," << face[2]; // normals
+      if (normals != NULL) {
+        f << "," << face[0] << "," << face[1] << "," << face[2]; // normals
+      }
       face += 3;
     }
   }
