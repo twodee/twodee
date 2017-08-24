@@ -1,3 +1,5 @@
+include_directories(${TWODEE_INCLUDE_DIRECTORIES})
+
 set (
   TWODEE_SOURCES
   Camera.cpp
