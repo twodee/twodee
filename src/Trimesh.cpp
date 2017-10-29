@@ -1060,6 +1060,8 @@ void Trimesh::Write(const std::string& path) {
     WritePly(path);
   } else if (path.rfind(".json") == path.length() - 5) {
     WriteJSON(path);
+  } else if (path.rfind(".stl") == path.length() - 4) {
+    WriteSTL(path);
   } else {
     throw MessagedException(std::string("illegal mesh format"));
   }
@@ -1251,6 +1253,35 @@ void Trimesh::WriteJSON(const std::string& path) {
   f << "}";
  
   // close file
+  f.close();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void Trimesh::WriteSTL(const std::string& path) {
+  std::ofstream f(path.c_str());
+
+  f << std::fixed << "solid" << std::endl;
+  
+  QVector3<float> *fnormals = GetFaceNormals();
+  int *face = faces;
+  for (int i = 0; i < GetFaceCount(); ++i, face += 3) {
+    f << "facet normal " << fnormals[i][0] << " " << fnormals[i][1] << " " << fnormals[i][2] << std::endl;
+    f << "outer loop" << std::endl;
+    
+    for (int vi = 0; vi < 3; ++vi) {
+      f << "vertex " << positions[face[vi] * 3 + 0] << " "
+                     << positions[face[vi] * 3 + 1] << " "
+                     << positions[face[vi] * 3 + 2] << std::endl;
+    }
+
+    f << "endloop" << std::endl;
+    f << "endfacet" << std::endl;
+  }
+  f << "endsolid" << std::endl;
+
+  delete[] fnormals;
+
   f.close();
 }
 

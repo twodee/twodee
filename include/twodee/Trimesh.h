@@ -173,8 +173,8 @@ class Trimesh {
      @param path Path to mesh file
      */
     void WriteObj(const std::string& path);
-
     void WriteJSON(const std::string& path);
+    void WriteSTL(const std::string& path);
 
     /**
      Writes mesh to file in a PLY format.
