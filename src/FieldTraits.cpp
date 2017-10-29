@@ -37,15 +37,23 @@ template<> const int FieldTraits<char>::type = FieldType::CHAR;
 
 /* ------------------------------------------------------------------------- */
 
+#define XSTR(x) STR(x)
+#define STR(x) #x
+
 #ifdef USE_IMAGEMAGICK
 template<> const Magick::StorageType FieldTraits<unsigned char>::magick_type = Magick::CharPixel;
 template<> const Magick::StorageType FieldTraits<unsigned short>::magick_type = Magick::ShortPixel;
-#
-template<> const Magick::StorageType FieldTraits<unsigned int>::magick_type = Magick::LongPixel;
 template<> const Magick::StorageType FieldTraits<char>::magick_type = Magick::CharPixel;
 template<> const Magick::StorageType FieldTraits<short>::magick_type = Magick::ShortPixel;
-template<> const Magick::StorageType FieldTraits<int>::magick_type = Magick::LongPixel;
 template<> const Magick::StorageType FieldTraits<float>::magick_type = Magick::FloatPixel;
+// ImageMagick 7 renamed the integer pixel types.
+#if MagickLibVersion >= 0x700
+template<> const Magick::StorageType FieldTraits<unsigned int>::magick_type = Magick::LongPixel;
+template<> const Magick::StorageType FieldTraits<int>::magick_type = Magick::LongPixel;
+#else
+template<> const Magick::StorageType FieldTraits<unsigned int>::magick_type = Magick::IntegerPixel;
+template<> const Magick::StorageType FieldTraits<int>::magick_type = Magick::IntegerPixel;
+#endif
 #endif
 
 /* ------------------------------------------------------------------------- */
