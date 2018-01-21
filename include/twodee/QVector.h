@@ -180,7 +180,8 @@ template<class T, int ndims> class QVector {
 
     QVector<T, ndims> GetReverse() const;
 
-    T GetDistanceTo(const QVector<T, ndims> &other) const;
+    T DistanceTo(const QVector<T, ndims> &other) const;
+    T ChessboardDistanceTo(const QVector<T, ndims> &other) const;
 
     QVector<T, ndims> Reflect(const QVector<T, ndims> &axis);
     QVector<T, ndims> Reflect(const QVector<T, ndims> &axis,
@@ -741,7 +742,7 @@ QVector<T, ndims> QVector<T, ndims>::GetReverse() const {
 /* ------------------------------------------------------------------------- */
 
 template<class T, int ndims>
-T QVector<T, ndims>::GetDistanceTo(const QVector<T, ndims> &other) const {
+T QVector<T, ndims>::DistanceTo(const QVector<T, ndims> &other) const {
   return (*this - other).GetLength(); 
 }
 
@@ -812,6 +813,13 @@ QVector<T, ndims> QVector<T, ndims>::Reflect(const QVector<T, ndims> &axis,
                                              const QVector<T, ndims> &point) {
   QVector<T, ndims> diff = *this - point;
   return diff.Reflect(axis) + point;
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<class T, int ndims>
+T QVector<T, ndims>::ChessboardDistanceTo(const QVector<T, ndims> &other) const {
+  return (*this - other).Abs().GetMaximum();
 }
 
 /* ------------------------------------------------------------------------- */
