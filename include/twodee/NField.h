@@ -220,7 +220,7 @@ template<class T, int ndims> class NField : public NFieldBase<ndims> {
      @param channel_id Channel to clear, -1 for all
      */
     void Clear(T clear_value = 0,
-               int channel_id = 0);
+               int channel_id = -1);
 
     void Log(int channel_id = 0);
 
