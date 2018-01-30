@@ -59,6 +59,8 @@ class Utilities {
     template<typename T> static T ClampAbove(T value, T min);
     template<typename T> static T ClampBelow(T value, T max);
     template<typename T> static T ClampBetween(T value, T min, T max);
+    template<typename T> static T Minimum(T a, T b);
+    template<typename T> static T Maximum(T a, T b);
 };
 
 /* ------------------------------------------------------------------------- */
@@ -100,6 +102,18 @@ template<typename T> T Utilities::ClampBelow(T value, T max) {
 
 template<typename T> T Utilities::ClampBetween(T value, T min, T max) {
   return ClampAbove(ClampBelow(value, max), min);
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<typename T> T Utilities::Minimum(T a, T b) {
+  return a < b ? a : b; 
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<typename T> T Utilities::Maximum(T a, T b) {
+  return a > b ? a : b; 
 }
 
 /* ------------------------------------------------------------------------- */
