@@ -527,7 +527,7 @@ Trimesh *Polyline<T>::Dowel(int nstops, T radius, bool is_capped, T twist, float
       }
     }
 
-    else if (nodes[vi].GetDistanceTo(nodes[vi - 1]) < EPSILON) {
+    else if (nodes[vi].DistanceTo(nodes[vi - 1]) < EPSILON) {
       int i_previous_ring = vertices.size() - nstops;
       for (int si = 0; si < nstops; ++si) {
         QVector3<T> previous_ring_neighbor(vertices[i_previous_ring + si].position);
